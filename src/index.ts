@@ -37,12 +37,21 @@ export default class Shopper {
   public getLocale(): string | null {
     return this.client.getLocale()
   }
+
+  /** Switch the sales channel of subsequent calls; null reverts to the unfiltered catalog. */
+  public setChannel(channel: string | null): void {
+    this.client.setChannel(channel)
+  }
+
+  public getChannel(): string | null {
+    return this.client.getChannel()
+  }
 }
 
 export type { ShopperConfig, TokenStorage } from './client'
 export { AuthModule } from './auth'
 export type { RegisterPayload, LoginPayload, ResetPasswordPayload } from './auth'
-export { StoreModule, CustomerModule, CartModule, type Paginated } from './store'
+export { StoreModule, CustomerModule, CartModule, SingletonResource, type Paginated } from './store'
 export type {
   CreateCartPayload,
   CreateCartLinePayload,
@@ -51,7 +60,8 @@ export type {
   ShippingOptionList,
 } from './store'
 export { ShopperApiError, buildQuery } from './http'
-export type { RequestParams, FetchOptions, FetchRequestOptions } from './http'
+export type { RequestParams, FetchOptions, FetchRequestOptions, FetchInit } from './http'
+export type * from '@shopperlabs/shopper-types'
 export { flatten } from './json-api'
 export type {
   JsonApiDocument,
