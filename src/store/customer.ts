@@ -1,4 +1,4 @@
-import type { Address, Customer, Order } from '@shopperlabs/shopper-types'
+import type { Address, Customer, Order, ResourceId } from '@shopperlabs/shopper-types'
 
 import type { HttpClient } from '../client'
 import type { RequestParams } from '../http'
@@ -72,6 +72,16 @@ export class CustomerModule {
     const document = await this.client.send('POST', `${this.path}/avatar`, form)
 
     return flatten<Customer>(document as NonNullable<typeof document>) as Customer
+  }
+
+  /**
+   * A temporary link to download a file of a paid order. It expires after
+   * five minutes: request one per download and send the browser to its url.
+   */
+  public async fileLink(orderId: ResourceId, itemId: ResourceId, fileId: ResourceId): Promise<{ url: string, expires_at: string }> {
+    const document = await this.client.request(`${this.path}/orders/${orderId}/items/${itemId}/files/${fileId}`)
+
+    return document.data as unknown as { url: string, expires_at: string }
   }
 
   /** Remove the uploaded photo and fall back to the generated avatar. */
